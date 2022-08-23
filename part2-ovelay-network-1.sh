@@ -61,17 +61,18 @@ sudo sysctl -w net.ipv4.ip_forward=1
 
 # ------------------- Overlay setup --------------------- #
 
-To establish the udp tunnel (make sure to run these as root (sudo -i)):
+# To establish the udp tunnel (make sure to run these as root (sudo -i)):
 
-1- On "ubuntu1" run: 
+# 1- On "ubuntu1" run:
 socat UDP:192.168.0.11:9000,bind=192.168.0.10:9000 TUN:172.16.0.100/16,tun-name=tundudp,iff-no-pi,tun-type=tun &
 #***Note that I removed "iff-up" switch from command on "ubuntu1" because I was getting an error. 
 
-2- On "ubuntu2" run: 
+# 2- On "ubuntu2" run:
 socat UDP:192.168.0.10:9000,bind=192.168.0.11:9000 TUN:172.16.1.100/16,tun-name=tundudp,iff-no-pi,tun-type=tun,iff-up &
 
-3- Return to "ubuntu1" and run
+# 3- Return to "ubuntu1" and run
 ip link set dev tundudp up
+#ip link set dev tundudp mtu 1492
 
 #echo "Disables reverse path filtering"
 #sudo bash -c 'echo 0 > /proc/sys/net/ipv4/conf/all/rp_filter'
